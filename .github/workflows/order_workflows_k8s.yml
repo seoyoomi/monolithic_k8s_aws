@@ -31,3 +31,16 @@ jobs:
       - name: aws ecr login
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: image build and push docker image to ecr
+        env:
+          REGISTRY: 310095858382.dkr.ecr.us-west-1.amazonaws.com
+          REPOSITORY: order-seoyoomi-backend
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f Docker .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: kubectl apply
+        run: |
+          kubectl apply -f ./order_redis.yml
+          kubectl apply -f ./order_deployment.yml
