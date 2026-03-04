@@ -29,5 +29,5 @@ jobs:
         run: aws eks update-kubeconfig --region us-west-1 --name lgcns-seoyoomi-cluster
 
       - name: aws ecr login
-        uses: aws actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v1
 
