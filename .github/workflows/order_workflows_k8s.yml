@@ -13,4 +13,4 @@ jobs:
 
     steps:
       - name: checkout github
-        uses: actions/checkoout@v2
+        uses: actions/checkout@v2
