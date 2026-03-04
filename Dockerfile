@@ -1,11 +1,23 @@
+# build stage (JDK + gradle) -> jar
+
 # jdk image pull
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine as builder
+WORKDIR /app
 
-# jar
-ARG JAR_FILE=build/libs/*.jar
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle settings.gradle ./
 
-# copy
-COPY ${JAR_FILE} ./backend.jar
 
-# run
-ENTRYPOINT [ "java", "-jar", "./backend.jar" ]
+RUN chmod +x gradlew
+RUN ./gradlew dependencies
+
+COPY src src
+RUN ./gradlew bootJar
+
+# runtime stage (jre) -> jar
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+COPY --from=builder /app/build/libs/*.jar app.jar
+ENTRYPOINT [ "java", "-jar", "app.jar" ]
