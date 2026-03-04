@@ -55,7 +55,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/users/signIn",
-                                            "health/alive").permitAll() 
+                                            "/health/alive").permitAll() 
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 //.requestMatchers("").authenticated()  
                 .requestMatchers("/admin/**").hasRole("ADMIN")
