@@ -1,0 +1,34 @@
+
+# kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
+# kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: redis-deployment
+  namespace: 
+  
+spec:
+  scaleTargetRef:
+    apiVersion: app/vq
+    kind: deployment
+    name: order-deployment
+
+  #pod
+  # minReplicas: 2
+  # maxReplicas: 4
+  # targetCPUUtilizationPercentage: 50
+
+  # ec2 auto scaling
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 30
+
+# hpa 통해서 pod 현황을 파악하고싶다면 ?
+# kubectl get hpa orders-backend-hap -n lgcns -w
+
+# 부하테스트를 위해서 특정 pod 접속
+# kubectl exec -it xxxxxxxx -n lgcns
+# apk add --no-cache curl
+# whilte true; do cul -s http://order-service/product/list; done
+
